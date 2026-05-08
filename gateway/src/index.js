@@ -78,7 +78,11 @@ async function main() {
         const adsResponse = await axios.get("http://advertise/ads");
         const ads = adsResponse.data.ads.map(ad => ({
             ...ad,
-            imageUrl: `/api/advertise-image?path=${encodeURIComponent(ad.imagePath)}`,
+            imageUrl: (() => {
+                const imagePath = String(ad.imagePath || "");
+                const file = imagePath.startsWith("/images/") ? imagePath.slice("/images/".length) : imagePath;
+                return `/api/advertise-image/${encodeURIComponent(file)}`;
+            })(),
         }));
 
         res.render("advertise", { ads });
@@ -94,12 +98,54 @@ async function main() {
             return;
         }
 
-        const response = await axios({
-            method: "GET",
-            url: `http://advertise${imagePath}`,
-            responseType: "stream",
-        });
-        response.data.pipe(res);
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `http://advertise${imagePath}`,
+                responseType: "stream",
+                validateStatus: () => true,
+            });
+
+            res.status(response.status);
+            if (response.headers && response.headers["content-type"]) {
+                res.setHeader("content-type", response.headers["content-type"]);
+            }
+            response.data.pipe(res);
+        }
+        catch (err) {
+            console.error("Failed to proxy advertise image.", err && err.stack || err);
+            res.sendStatus(502);
+        }
+    });
+
+    //
+    // Cleaner proxy route (avoids query encoding issues).
+    //
+    app.get("/api/advertise-image/:file", async (req, res) => {
+        const file = req.params.file;
+        if (!file || typeof file !== "string" || file.includes("/") || file.includes("\\") || file.includes("..")) {
+            res.sendStatus(400);
+            return;
+        }
+
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `http://advertise/images/${encodeURIComponent(file)}`,
+                responseType: "stream",
+                validateStatus: () => true,
+            });
+
+            res.status(response.status);
+            if (response.headers && response.headers["content-type"]) {
+                res.setHeader("content-type", response.headers["content-type"]);
+            }
+            response.data.pipe(res);
+        }
+        catch (err) {
+            console.error("Failed to proxy advertise image file.", err && err.stack || err);
+            res.sendStatus(502);
+        }
     });
 
     //

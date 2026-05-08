@@ -18,7 +18,7 @@ spec:
       containers:
       - name: advertise
         image: $CONTAINER_REGISTRY/advertise:1
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: PORT
           value: "4000"
