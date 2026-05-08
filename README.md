@@ -14,4 +14,10 @@ docker-compose up --build
 
 Give it some time to start, wait for the `gateway` service to come online. Then point your browser at http://localhost:4000/
 
+## Production deployment on GCP (GKE)
+
+If you’re doing coursework that references Azure but you want to deploy on **GCP**, follow:
+
+- `docs/gcp-setup.md`
+
 [Click here to support my work](https://www.codecapers.com.au/about#support-my-work)

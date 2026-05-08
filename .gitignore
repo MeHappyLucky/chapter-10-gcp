@@ -2,3 +2,5 @@ node_modules/
 todo.txt
 *.bak
 mock-storage/storage
+supersecretnopush/
+docs/

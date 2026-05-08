@@ -21,9 +21,6 @@ docker push $CONTAINER_REGISTRY/history:1
 docker build -t $CONTAINER_REGISTRY/mock-storage:1 --file ../../mock-storage/Dockerfile-prod ../../mock-storage
 docker push $CONTAINER_REGISTRY/mock-storage:1
 
-docker build -t $CONTAINER_REGISTRY/history:1 --file ../../history/Dockerfile-prod ../../history
-docker push $CONTAINER_REGISTRY/history:1
-
 docker build -t $CONTAINER_REGISTRY/video-streaming:1 --file ../../video-streaming/Dockerfile-prod ../../video-streaming
 docker push $CONTAINER_REGISTRY/video-streaming:1
 
@@ -32,6 +29,9 @@ docker push $CONTAINER_REGISTRY/video-upload:1
 
 docker build -t $CONTAINER_REGISTRY/gateway:1 --file ../../gateway/Dockerfile-prod ../../gateway
 docker push $CONTAINER_REGISTRY/gateway:1
+
+docker build -t $CONTAINER_REGISTRY/advertise:1 --file ../../advertise/Dockerfile-prod ../../advertise
+docker push $CONTAINER_REGISTRY/advertise:1
 
 # 
 # Deploy containers to Kubernetes.
@@ -46,3 +46,4 @@ envsubst < mock-storage.yaml | kubectl apply -f -
 envsubst < video-streaming.yaml | kubectl apply -f -
 envsubst < video-upload.yaml | kubectl apply -f -
 envsubst < gateway.yaml | kubectl apply -f -
+envsubst < advertise.yaml | kubectl apply -f -

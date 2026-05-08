@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>FlixTube: Home</title>
+        <title>FlixTube: Advertise</title>
 
         <link rel="stylesheet" href="css/tailwind.min.css">
         <link rel="stylesheet" href="css/app.css">
@@ -15,7 +15,7 @@
                     <div class="text-xl font-bold">
                         FlixTube
                     </div>
-                    <div class="ml-16 border-b-2 border-blue-600">
+                    <div class="ml-16">
                         <a href="/">Videos</a>
                     </div>
                     <div class="ml-4">
@@ -24,26 +24,26 @@
                     <div class="ml-4">
                         <a href="/history">History</a>
                     </div>
-                    <div class="ml-4">
+                    <div class="ml-4 border-b-2 border-blue-600">
                         <a href="/advertise">Advertise</a>
                     </div>
                 </div>
             </div>
 
             <div class="m-4">
-                <h1>Videos</h1>
-                <div id="video-list" class="m-4">
-                    {{#if videos}}
-                        {{#each videos}}
-                            <div class="mt-1">
-                                <a href="/video?id={{this._id}}">{{this.name}}</a> 
-                            </div>
-                        {{/each}}
-                    {{else}}
-                        No videos uploaded yet.
-                    {{/if}}
+                <h1>Advertise</h1>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    {{#each ads}}
+                        <a class="border rounded p-3 hover:bg-gray-50" href="{{this.url}}" target="_blank" rel="noreferrer">
+                            <img class="w-full h-40 object-cover rounded" src="{{this.imageUrl}}" alt="{{this.name}}">
+                            <div class="mt-2 font-semibold">{{this.name}}</div>
+                            <div class="text-sm text-gray-600 break-all">{{this.url}}</div>
+                        </a>
+                    {{/each}}
                 </div>
             </div>
         </div>
     </body>
 </html>
+
